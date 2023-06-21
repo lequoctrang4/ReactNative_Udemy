@@ -1,46 +1,52 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput} from 'react-native';
-
+import { StatusBar } from "expo-status-bar";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ScrollView,
+  FlatList
+} from "react-native";
+import { useState } from "react";
+import { styles } from "./App.css";
 export default function App() {
+  const [input, setInput] = useState(null);
+  const [listGoal, setListGoal] = useState([]);
+  function goalHandleInput(enteredText) {
+    setInput(enteredText);
+  }
+  function goalHandleSubmit() {
+    setListGoal((curr) => [...curr, input]);
+    setInput(null);
+  }
   return (
     <View style={styles.appContainer}>
-        <View style={styles.inputContrainer}>
-          <TextInput style={styles.textInput} placeholder='Hello Tuesday!'/>
-          <Button style={styles.button} title='Add goal'/>
+      <View style={styles.inputContrainer}>
+        <TextInput
+          style={styles.textInput}
+          placeholder="Hello Tuesday!"
+          value={input}
+          onChangeText={goalHandleInput}
+        />
+        <Button
+          color={"black"}
+          style={styles.button}
+          title="Add goal"
+          onPress={goalHandleSubmit}
+        />
+      </View>
+      <View style={styles.goalContainer}>
+        <ScrollView alwaysBounceVertical={false}>
+          {listGoal.map((goal) => (
+            <View style={styles.goalItem}>
+              <Text style={styles.goalText} key={goal}> {goal}</Text>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
 
-        </View>
-        <View>
-            <Text>List of goals...</Text>
-        </View>
       <StatusBar style="auto" />
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  appContainer: {
-    padding: 50,
-    display: "flex",
-    flexDirection: "column",
-  },
-  inputContrainer: {
-    flexDirection: "row",
-    justifyContent: "space-between"
-  }
-  ,
-  textInput: {
-    borderWidth: 1,
-    borderColor: '#cccccc',
-    width: "80%",
-    marginRight: 8,
-    paddingTop: 5,
-    paddingBottom: 5,
-    paddingLeft: 10,
-    borderRadius: 5
-  },
-  button:{
-    backgroundColor: "white",
-    color: "lightblue"
-  }
-
-});
